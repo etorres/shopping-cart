@@ -23,7 +23,7 @@ final class ShoppingCartSuite extends CatsEffectSuite with ScalaCheckEffectSuite
           for
             _ <- names.traverse_(shoppingCart.addProductBy(_).value)
             _ <- shoppingCart.applyCoupon(code).value
-            _ <- shoppingCart.printStatement()
+            _ <- shoppingCart.printStatus()
           yield ()
         .map:
           case (result, obtainedFinalState) =>

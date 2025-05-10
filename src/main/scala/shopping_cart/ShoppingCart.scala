@@ -20,7 +20,7 @@ trait ShoppingCart:
   def addProductBy(name: Product.Name): OptionT[IO, Double]
   def applyCoupon(code: Coupon.Code): OptionT[IO, Coupon.Discount]
   def deleteProductBy(name: Product.Name): OptionT[IO, Double]
-  def printStatement(): IO[Unit]
+  def printStatus(): IO[Unit]
 
 object ShoppingCart:
   final class InMemory private (
@@ -60,7 +60,7 @@ object ShoppingCart:
             case _ => None -> 0d
       yield -price
 
-    override def printStatement(): IO[Unit] =
+    override def printStatus(): IO[Unit] =
       for
         _ <- console.println("Product name | Price with VAT | Quantity")
         productNames <- productNames()
@@ -97,7 +97,7 @@ object ShoppingCart:
 
     private def productNames() =
       import scala.jdk.CollectionConverters.*
-      IO.pure(productsJMap.keys()).map(_.asScala.toList)
+      IO.delay(productsJMap.keys()).map(_.asScala.toList)
 
   object InMemory:
     def impl(

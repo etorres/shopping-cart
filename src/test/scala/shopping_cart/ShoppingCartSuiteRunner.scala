@@ -34,7 +34,7 @@ object ShoppingCartSuiteRunner:
   )(run: ShoppingCart => IO[A]): IO[(Either[Throwable, A], ShoppingCartSuiteState)] =
     for
       consoleStateRef <- Ref.of[IO, ConsoleState](initialState.consoleState)
-      couponsRepository <- FakeCouponsRepository.fillWith(initialState.coupons)
+      couponsRepository = FakeCouponsRepository(initialState.coupons)
       productsRepository <- FakeProductsRepository.fillWith(initialState.products)
       shoppingCart <-
         given Console[IO] = FakeConsole(consoleStateRef)
